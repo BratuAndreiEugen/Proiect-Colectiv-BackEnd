@@ -4,8 +4,10 @@ import org.example.data.entity.Recipe;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
@@ -32,10 +34,10 @@ public class RecipeRepository {
      *
      * @param recipe
      */
+    @Transactional
     public boolean saveRecipe(Recipe recipe) {
-        Session session = entityManager.unwrap(Session.class);
-        Serializable id = session.save(recipe);
-        return id != null;
+        Recipe recipeSaved = entityManager.merge(recipe);
+        return entityManager.contains(recipeSaved);
     }
 
     /**
