@@ -38,4 +38,17 @@ public class UserRepository {
                 .setParameter("username", username)
                 .uniqueResult();
     }
+
+    /**
+     * Returns user by id / null (if not found)
+     *
+     * @param id
+     * @return one user or null
+     */
+    public User getUserById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("from User where id = :id", User.class)
+                .setParameter("id", id)
+                .uniqueResult();
+    }
 }

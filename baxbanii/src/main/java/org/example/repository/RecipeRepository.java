@@ -1,14 +1,13 @@
 package org.example.repository;
 
 import org.example.data.entity.Recipe;
+import org.example.data.entity.User;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,5 +52,18 @@ public class RecipeRepository {
                 .setParameter("userId", userId)
                 .getResultList();
         return recipes != null ? recipes : Collections.emptyList();
+    }
+
+    /**
+     * Returns recipe by id / null (if not found)
+     *
+     * @param id
+     * @return one recipe or null
+     */
+    public Recipe getRecipeById(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("from Recipe where id = :id", Recipe.class)
+                .setParameter("id", id)
+                .uniqueResult();
     }
 }

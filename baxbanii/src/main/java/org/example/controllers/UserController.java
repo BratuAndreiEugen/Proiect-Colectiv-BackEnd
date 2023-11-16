@@ -1,7 +1,9 @@
 package org.example.controllers;
 import lombok.AllArgsConstructor;
 import org.example.controllers.requestClasses.UserDTO;
+import org.example.exceptions.DataChangeException;
 import org.example.service.MyService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,11 +17,15 @@ public class UserController {
     private MyService service;
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public ResponseEntity<UserDTO> getUserByUsername(@PathVariable String username){
-        UserDTO user = service.getUserDTOByUsername(username);
-        if (user == null) {
-            return ResponseEntity.notFound().build();
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) throws DataChangeException {
+
+        try{
+            UserDTO user = service.getUserDTOByUsername(username);
+            return ResponseEntity.ok(user);
         }
-        return ResponseEntity.ok(user);
+        catch (DataChangeException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 }
