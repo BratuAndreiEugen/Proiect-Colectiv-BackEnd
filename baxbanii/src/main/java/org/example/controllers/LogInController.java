@@ -19,10 +19,10 @@ public class LogInController {
     private final UserService service;
 
     @GetMapping
-    public ResponseEntity<String> logIn(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<String> logIn(@RequestBody LogInRequest logInRequest) {
         try {
-            service.logIn(email, password);
-            String token = generateToken(email);
+            service.logIn(logInRequest.getEmail(), logInRequest.getPassword());
+            String token = generateToken(logInRequest.getEmail());
             return ResponseEntity.ok(token);
         } catch (IllegalAccessException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
