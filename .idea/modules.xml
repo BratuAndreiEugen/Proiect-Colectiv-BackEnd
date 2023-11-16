@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Proiect-Colectiv-BackEnddddddddd.iml" filepath="$PROJECT_DIR$/.idea/Proiect-Colectiv-BackEnddddddddd.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/baxbanii.iml" filepath="$PROJECT_DIR$/.idea/modules/baxbanii.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/baxbanii.main.iml" filepath="$PROJECT_DIR$/.idea/modules/baxbanii.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/baxbanii.test.iml" filepath="$PROJECT_DIR$/.idea/modules/baxbanii.test.iml" />
     </modules>
   </component>
 </project>
