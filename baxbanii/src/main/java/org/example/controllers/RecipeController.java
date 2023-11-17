@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import com.mysql.cj.xdevapi.JsonArray;
 import lombok.AllArgsConstructor;
+import org.example.controllers.requestClasses.RecipeDTO;
 import org.example.controllers.requestClasses.UserDTO;
 import org.example.data.entity.Recipe;
 import org.example.exceptions.DataChangeException;
@@ -27,7 +28,7 @@ public class RecipeController {
     public ResponseEntity<?> getRecipes(){
         System.out.println("Get all recipes ...");
         try{
-            List<Recipe> recipes = service.getAllRecipes();
+            List<RecipeDTO> recipes = service.getAllRecipes();
             return ResponseEntity.ok(recipes);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -38,8 +39,8 @@ public class RecipeController {
     public ResponseEntity<?> getUserRecipesById(@PathVariable Long userId){
         System.out.println("Get user recipes ...");
         try{
-            List<Recipe> recipes = service.getRecipesByUser(userId);
-            return ResponseEntity.ok(recipes);
+            List<RecipeDTO> recipesDTO = service.getRecipesByUser(userId);
+            return ResponseEntity.ok(recipesDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
@@ -60,8 +61,8 @@ public class RecipeController {
     public ResponseEntity<?> getRecipeById(@PathVariable Long id) {
 
         try{
-            Recipe recipe = service.getRecipeById(id);
-            return ResponseEntity.ok(recipe);
+            RecipeDTO recipeDTO = service.getRecipeById(id);
+            return ResponseEntity.ok(recipeDTO);
         }
         catch (DataChangeException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

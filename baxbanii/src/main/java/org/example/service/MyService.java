@@ -1,5 +1,6 @@
 package org.example.service;
 import lombok.AllArgsConstructor;
+import org.example.controllers.requestClasses.RecipeDTO;
 import org.example.data.entity.User;
 import org.example.data.entity.Recipe;
 import org.example.controllers.requestClasses.UserDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.xml.bind.ValidationException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -37,12 +39,31 @@ public class MyService {
     }
 
 
-    public List<Recipe> getAllRecipes() throws DataChangeException {
+    public RecipeDTO toRecipeDTO(Recipe recipe) {
+        RecipeDTO dto = new RecipeDTO();
+        dto.setId(recipe.getId());
+        dto.setTitle(recipe.getTitle());
+        dto.setCaption(recipe.getCaption());
+        dto.setAverageRating(recipe.getAverageRating());
+        dto.setThumbnailLink(recipe.getThumbnailLink());
+        dto.setVideoLink(recipe.getVideoLink());
+        dto.setUploadDate(recipe.getUploadDate());
+        dto.setPosterId(recipe.getPosterId());
+
+
+        User poster = userRepository.getUserById(recipe.getPosterId());
+        dto.setPosterUsername(poster != null ? poster.getUsername() : "Unknown");
+
+        return dto;
+    }
+
+
+    public List<RecipeDTO> getAllRecipes() throws DataChangeException {
         List<Recipe> recipes = recipeRepository.getAllRecipes();
         if(recipes.isEmpty()){
             throw new DataChangeException("There are no recipes!");
         }
-        return recipes;
+        return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
     }
 
     public boolean saveRecipe(Recipe recipe) throws DataChangeException {
@@ -58,7 +79,7 @@ public class MyService {
         }
     }
 
-    public List<Recipe> getRecipesByUser(Long userId) throws DataChangeException {
+    public List<RecipeDTO> getRecipesByUser(Long userId) throws DataChangeException {
         User user = userRepository.getUserById(userId);
         if(user == null){
             throw new DataChangeException("There is no user with this id!");
@@ -67,7 +88,7 @@ public class MyService {
         if(recipes.isEmpty()){
             throw new DataChangeException("There are no recipes for this user!");
         }
-        return recipes;
+        return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
     }
 
     public List<User> getAllUsers() {
@@ -82,11 +103,12 @@ public class MyService {
         return toUserDTO(user);
     }
 
-    public Recipe getRecipeById(Long recipeId) throws DataChangeException{
+    public RecipeDTO getRecipeById(Long recipeId) throws DataChangeException{
         Recipe recipe = recipeRepository.getRecipeById(recipeId);
-        if(recipe == null){
+        RecipeDTO recipeDTO = toRecipeDTO(recipe);
+        if(recipeDTO == null){
             throw new DataChangeException("There is no recipe with this id!");
         }
-        return recipe;
+        return recipeDTO;
     }
 }
