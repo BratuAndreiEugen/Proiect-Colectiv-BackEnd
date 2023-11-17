@@ -19,7 +19,7 @@ public class LogInController {
 
     private final UserService service;
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<String> logIn(@RequestBody LogInRequest logInRequest) {
         try {
             service.logIn(logInRequest.getEmail(), logInRequest.getPassword());
