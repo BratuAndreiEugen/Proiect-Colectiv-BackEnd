@@ -17,11 +17,13 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1/recipes")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RecipeController {
 
     private MyService service;
 
-    @RequestMapping(method = RequestMethod.GET)
+    //@RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public ResponseEntity<?> getRecipes(){
         System.out.println("Get all recipes ...");
         try{

@@ -5,14 +5,12 @@ import org.example.exceptions.DataChangeException;
 import org.example.service.MyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/v1/users")
+@CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
     private MyService service;
 
