@@ -51,4 +51,46 @@ public class UserRepository {
                 .setParameter("id", id)
                 .uniqueResult();
     }
+
+    /**
+     * Returns user by email / null (if not found)
+     *
+     * @param email
+     * @return one username or null
+     */
+    public User getUserByEmail(String email) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("from User where email = :email", User.class)
+                .setParameter("email", email)
+                .uniqueResult();
+    }
+
+    /**
+     * Returns user by email and password / null (if not found)
+     *
+     * @param email
+     * @param password
+     * @return one username or null
+     */
+    public User getUserByEmailAndPassword(String email, String password) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("from User where email = :email and passwordHash = :password", User.class)
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .uniqueResult();
+    }
+
+    /**
+     * Saves a user to the database.
+     *
+     * @param user the user to be saved
+     */
+    public void saveUser(User user) {
+        Session session = entityManager.unwrap(Session.class);
+        if (user.getId() == null) {
+            session.save(user);
+        } else {
+            session.saveOrUpdate(user);
+        }
+    }
 }
