@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/v1/logIn")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class LogInController {
 
     private final UserService service;
@@ -24,7 +25,7 @@ public class LogInController {
             service.logIn(logInRequest.getEmail(), logInRequest.getPassword());
             String token = generateToken(logInRequest.getEmail());
             return ResponseEntity.ok(token);
-        } catch (IllegalAccessException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
