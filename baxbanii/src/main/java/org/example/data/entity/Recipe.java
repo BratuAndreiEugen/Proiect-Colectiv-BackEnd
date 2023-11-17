@@ -26,4 +26,14 @@ public class Recipe {
     public Recipe() {
 
     }
+
+    public Recipe(String title, String caption, Float averageRating, String thumbnailLink, String videoLink, String uploadDate, Long posterId) {
+        this.title = title;
+        this.caption = caption;
+        this.averageRating = averageRating;
+        this.thumbnailLink = thumbnailLink;
+        this.videoLink = videoLink;
+        this.uploadDate = uploadDate;
+        this.posterId = posterId;
+    }
 }
