@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.bind.ValidationException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -46,11 +48,13 @@ public class RecipeController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<String> save(@RequestBody Recipe recipe){
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        Float rating = 0.0f;
         try {
-            service.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), recipe.getAverageRating(), recipe.getThumbnailLink(),
-            recipe.getVideoLink(), recipe.getUploadDate(), recipe.getPosterId()));
+            service.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
+            recipe.getVideoLink(), date, recipe.getPosterId()));
             return ResponseEntity.ok("ok!");
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
