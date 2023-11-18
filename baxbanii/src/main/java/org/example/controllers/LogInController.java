@@ -8,7 +8,6 @@ import org.example.controllers.requestClasses.LogInRequest;
 import org.example.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +21,8 @@ public class LogInController {
     @PostMapping
     public ResponseEntity<String> logIn(@RequestBody LogInRequest logInRequest) {
         try {
-            service.logIn(logInRequest.getEmail(), logInRequest.getPassword());
-            String token = generateToken(logInRequest.getEmail());
+            service.logIn(logInRequest.getUserName(), logInRequest.getPassword());
+            String token = generateToken(logInRequest.getUserName());
             return ResponseEntity.ok(token);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

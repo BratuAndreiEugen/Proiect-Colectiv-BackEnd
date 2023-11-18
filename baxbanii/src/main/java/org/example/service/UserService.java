@@ -19,8 +19,8 @@ public class UserService implements UserDetailsService {
     private final ValidateUser validateUser;
     private final BCryptPasswordEncoder cryptPasswordEncoder;
 
-    public void logIn(String email, String password) throws IllegalAccessException {
-        User user = userRepository.getUserByEmail(email);
+    public void logIn(String userName, String password) throws IllegalAccessException {
+        User user = userRepository.getUserByUsername(userName);
         if (user == null || !cryptPasswordEncoder.matches(password, user.getPasswordHash())) {
             throw new IllegalAccessException("email or password are invalid!");
         }
