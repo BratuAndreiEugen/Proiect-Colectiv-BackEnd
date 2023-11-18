@@ -52,6 +52,20 @@ public class RecipeRepository {
                 .getResultList();
         return recipes != null ? recipes : Collections.emptyList();
     }
+    /**
+     * Returns all recipes that are not his
+     *
+     * @param userId
+     * @return
+     */
+    public List<Recipe> getRecipesAllThatIsNotUsers(Long userId) {
+        Session session = entityManager.unwrap(Session.class);
+        String hql = "from Recipe r where r.posterId != :userId";
+        List<Recipe> recipes = session.createQuery(hql, Recipe.class)
+                .setParameter("userId", userId)
+                .getResultList();
+        return recipes != null ? recipes : Collections.emptyList();
+    }
 
     /**
      * Returns recipe by id / null (if not found)

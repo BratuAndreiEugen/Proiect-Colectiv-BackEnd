@@ -100,4 +100,16 @@ public class MyService {
         }
         return toRecipeDTO(recipe);
     }
+
+    public List<RecipeDTO> getRecipesThatAreNotUsers(Long userId) throws DataChangeException {
+        User user = userRepository.getUserById(userId);
+        if(user == null){
+            throw new DataChangeException("There is no user with this id!");
+        }
+        List<Recipe> recipes = recipeRepository.getRecipesAllThatIsNotUsers(userId);
+        if(recipes.isEmpty()){
+            throw new DataChangeException("There are no recipes for this user!");
+        }
+        return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
+    }
 }

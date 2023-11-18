@@ -43,6 +43,15 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+    @RequestMapping(value = "/user/not/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUserRecipesNotById(@PathVariable Long userId) {
+        try {
+            List<RecipeDTO> recipesDTO = service.getRecipesThatAreNotUsers(userId);
+            return ResponseEntity.ok(recipesDTO);
+        } catch (DataChangeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ResponseEntity<String> save(@RequestBody Recipe recipe) {
