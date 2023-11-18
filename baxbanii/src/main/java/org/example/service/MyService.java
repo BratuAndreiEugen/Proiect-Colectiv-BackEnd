@@ -60,13 +60,14 @@ public class MyService {
         return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
     }
 
-    public void saveRecipe(Recipe recipe) throws DataChangeException {
+    public Recipe saveRecipe(Recipe recipe) throws DataChangeException {
         try {
             validateRecipe.validateRecipe(recipe);
-            boolean isSaved = recipeRepository.saveRecipe(recipe);
-            if (!isSaved) {
+            Recipe newRecipe = recipeRepository.saveRecipe(recipe);
+            if (newRecipe == null) {
                 throw new DataChangeException("Recipe could not be saved");
             }
+            return newRecipe;
         } catch (DataChangeException e) {
             throw new DataChangeException(e.getMessage());
         }

@@ -49,9 +49,9 @@ public class RecipeController {
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         Float rating = 0.0f;
         try {
-            service.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
+            Recipe newRecipe = service.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
                     recipe.getVideoLink(), date, recipe.getPosterId()));
-            return ResponseEntity.ok("ok!");
+            return ResponseEntity.ok(newRecipe.getId().toString());
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }

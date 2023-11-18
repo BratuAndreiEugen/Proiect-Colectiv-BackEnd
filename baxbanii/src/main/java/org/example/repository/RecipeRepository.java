@@ -34,9 +34,8 @@ public class RecipeRepository {
      * @param recipe
      */
     @Transactional
-    public boolean saveRecipe(Recipe recipe) {
-        Recipe recipeSaved = entityManager.merge(recipe);
-        return entityManager.contains(recipeSaved);
+    public Recipe saveRecipe(Recipe recipe) {
+        return entityManager.merge(recipe);
     }
 
     /**
