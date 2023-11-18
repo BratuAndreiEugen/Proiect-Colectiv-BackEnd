@@ -15,7 +15,7 @@ public class UserController {
     private MyService service;
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) throws DataChangeException {
+    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
 
         try{
             UserDTO user = service.getUserDTOByUsername(username);
