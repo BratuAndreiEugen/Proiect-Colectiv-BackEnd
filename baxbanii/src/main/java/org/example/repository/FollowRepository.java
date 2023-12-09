@@ -3,6 +3,7 @@ package org.example.repository;
 import lombok.AllArgsConstructor;
 import org.example.data.entity.Follow;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -34,8 +35,20 @@ public class FollowRepository {
     }
 
     public void deleteFollows(Follow follow) {
-        Session session = entityManager.unwrap(Session.class);
-        session.delete(follow);
+        Transaction transaction = null;
+        try {
+            Session session = entityManager.unwrap(Session.class);
+            transaction = session.beginTransaction();
+
+            session.delete(follow);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
+        }
     }
 
 

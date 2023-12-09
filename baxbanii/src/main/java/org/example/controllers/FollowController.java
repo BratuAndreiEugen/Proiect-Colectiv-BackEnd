@@ -26,11 +26,11 @@ public class FollowController {
         Follow follow = followService.getFollow(followRequest.getFollowerId(), followRequest.getFolloweeId());
         if (follow != null) {
             followService.unfollowUser(follow);
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body("unfollow");
         } else {
             follow = new Follow(followRequest.getFollowerId(), followRequest.getFolloweeId());
             followService.startFollowing(follow);
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body("follow");
         }
     }
 
@@ -40,11 +40,11 @@ public class FollowController {
         Follow follow = followService.getFollow(user.getId(), followRequest.getFolloweeId());
         if (follow != null) {
             followService.unfollowUser(follow);
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body("unfollow");
         } else {
             follow = new Follow(user.getId(), followRequest.getFolloweeId());
             followService.startFollowing(follow);
-            return ResponseEntity.ok().body("ok");
+            return ResponseEntity.ok().body("follow");
         }
     }
 
