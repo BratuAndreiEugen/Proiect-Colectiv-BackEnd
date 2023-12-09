@@ -20,13 +20,13 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class RecipeController {
 
-    private MyService service;
+    private MyService myService;
 
     @GetMapping
     public ResponseEntity<?> getRecipes() {
         System.out.println("Get all recipes ...");
         try {
-            List<RecipeDTO> recipes = service.getAllRecipes();
+            List<RecipeDTO> recipes = myService.getAllRecipes();
             return ResponseEntity.ok(recipes);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -37,7 +37,7 @@ public class RecipeController {
     public ResponseEntity<?> getUserRecipesById(@PathVariable Long userId) {
         System.out.println("Get user recipes ...");
         try {
-            List<RecipeDTO> recipesDTO = service.getRecipesByUser(userId);
+            List<RecipeDTO> recipesDTO = myService.getRecipesByUser(userId);
             return ResponseEntity.ok(recipesDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -46,7 +46,7 @@ public class RecipeController {
     @RequestMapping(value = "/user/not/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserRecipesNotById(@PathVariable Long userId) {
         try {
-            List<RecipeDTO> recipesDTO = service.getRecipesThatAreNotUsers(userId);
+            List<RecipeDTO> recipesDTO = myService.getRecipesThatAreNotUsers(userId);
             return ResponseEntity.ok(recipesDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -58,7 +58,7 @@ public class RecipeController {
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         Float rating = 0.0f;
         try {
-            Recipe newRecipe = service.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
+            Recipe newRecipe = myService.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
                     recipe.getVideoLink(), date, recipe.getPosterId()));
             return ResponseEntity.ok(newRecipe.getId().toString());
         } catch (DataChangeException e) {
@@ -70,7 +70,7 @@ public class RecipeController {
     public ResponseEntity<?> getRecipeById(@PathVariable Long id) {
 
         try {
-            RecipeDTO recipeDTO = service.getRecipeById(id);
+            RecipeDTO recipeDTO = myService.getRecipeById(id);
             return ResponseEntity.ok(recipeDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

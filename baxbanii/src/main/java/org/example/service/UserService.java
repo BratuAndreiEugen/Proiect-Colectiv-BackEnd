@@ -11,7 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.xml.bind.ValidationException;
 
-@org.springframework.stereotype.Service
+@org.springframework.stereotype.Service(value = "userService")
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
 
@@ -29,10 +29,10 @@ public class UserService implements UserDetailsService {
     public void registerUser(User user) throws ValidationException {
         try {
             validateUser.validateUser(user);
-            if(userRepository.getUserByUsername(user.getUsername())!=null){
+            if (userRepository.getUserByUsername(user.getUsername()) != null) {
                 throw new ValidationException("userName is already taken!");
             }
-            if(userRepository.getUserByEmail(user.getEmail())!=null){
+            if (userRepository.getUserByEmail(user.getEmail()) != null) {
                 throw new ValidationException("email is already taken!");
             }
             String password = cryptPasswordEncoder.encode(user.getPasswordHash());
@@ -42,6 +42,13 @@ public class UserService implements UserDetailsService {
             throw new ValidationException(e);
         }
 
+    }
+
+    public User getUserById(Long userId){
+        return userRepository.getUserById(userId);
+    }
+    public User getUserByUserName(String username) {
+        return userRepository.getUserByUsername(username);
     }
 
     @Override

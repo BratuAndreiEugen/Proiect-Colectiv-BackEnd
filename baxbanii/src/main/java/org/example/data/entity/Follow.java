@@ -2,6 +2,7 @@ package org.example.data.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -9,15 +10,17 @@ import javax.persistence.*;
 @Entity
 @Table(name = "follows")
 @AllArgsConstructor
+@NoArgsConstructor
 public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    private Long folowerId;
-    private Long foloweeId;
+    private Long folowerId; //asta e userul
+    private Long foloweeId; // urmaritorii userului
 
-    public Follow() {
-
+    public Follow(Long folowerId, Long foloweeId) {
+        this.folowerId = folowerId;
+        this.foloweeId = foloweeId;
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-@Service
+@Service(value = "myService")
 public class MyService {
 
     private ValidateRecipe validateRecipe;

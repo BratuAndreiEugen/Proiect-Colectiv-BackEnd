@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1/users")
 @CrossOrigin(origins = "http://localhost:5173")
 public class UserController {
-    private MyService service;
+    private MyService myService;
 
     @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
 
         try{
-            UserDTO user = service.getUserDTOByUsername(username);
+            UserDTO user = myService.getUserDTOByUsername(username);
             return ResponseEntity.ok(user);
         }
         catch (DataChangeException e){
