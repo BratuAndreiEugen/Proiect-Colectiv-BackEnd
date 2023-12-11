@@ -3,20 +3,25 @@ package org.example.service;
 import lombok.AllArgsConstructor;
 import org.example.controllers.requestClasses.RecipeDTO;
 import org.example.controllers.requestClasses.UserDTO;
+import org.example.data.entity.Follow;
 import org.example.data.entity.Recipe;
 import org.example.data.entity.User;
 import org.example.exceptions.DataChangeException;
+import org.example.repository.FollowRepository;
 import org.example.repository.RecipeRepository;
 import org.example.repository.UserRepository;
 import org.example.validation.ValidateRecipe;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service(value = "myService")
-public class MyService {
+public class RecipeService {
 
     private ValidateRecipe validateRecipe;
 
@@ -24,13 +29,7 @@ public class MyService {
 
     private UserRepository userRepository;
 
-    public UserDTO toUserDTO(User user) {
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setUsername(user.getUsername());
-        dto.setBio(user.getBio());
-        return dto;
-    }
+    private FollowRepository followRepository;
 
 
     public RecipeDTO toRecipeDTO(Recipe recipe) {
@@ -85,14 +84,6 @@ public class MyService {
         return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
     }
 
-    public UserDTO getUserDTOByUsername(String username) throws DataChangeException {
-        User user = userRepository.getUserByUsername(username);
-        if(user == null){
-            throw new DataChangeException("There is no user with this username!");
-        }
-        return toUserDTO(user);
-    }
-
     public RecipeDTO getRecipeById(Long recipeId) throws DataChangeException{
         Recipe recipe = recipeRepository.getRecipeById(recipeId);
         if(recipe == null){
@@ -112,4 +103,73 @@ public class MyService {
         }
         return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
     }
+
+    public List<RecipeDTO> getCustomRecipeList(Long userId) throws DataChangeException {
+
+        User user = userRepository.getUserById(userId);
+        if(user == null){
+            throw new DataChangeException("There is no user with this id!");
+        }
+
+        List<Recipe> allRecipes = recipeRepository.getAllRecipes();
+
+        if(allRecipes.isEmpty()){
+            throw new DataChangeException("There are no recipes!");
+        }
+
+        return reorganizeRecipes(userId, allRecipes);
+    }
+
+    public List<RecipeDTO> getCustomRecipeListPaginate(Long userId, int pageNumber, int pageSize) throws DataChangeException {
+
+        User user = userRepository.getUserById(userId);
+        if(user == null){
+            throw new DataChangeException("There is no user with this id!");
+        }
+
+        List<Recipe> allRecipes = recipeRepository.getAllRecipes();
+
+        if(allRecipes.isEmpty()){
+            throw new DataChangeException("There are no recipes!");
+        }
+
+        List<RecipeDTO> customRecipesList = reorganizeRecipes(userId, allRecipes);
+
+        int start = (pageNumber - 1) * pageSize;
+        int end = Math.min(start + pageSize, customRecipesList.size());
+
+        if(start > customRecipesList.size()) {
+            throw new DataChangeException("Page number is out of range");
+        }
+
+        return customRecipesList.subList(start, end);
+    }
+
+    private List<RecipeDTO> reorganizeRecipes(Long userId, List<Recipe> allRecipes) {
+        List<Follow> followers = followRepository.getAllUsersFollowers(userId);
+        List<Long> followedUserIds = followers.stream()
+                .map(Follow::getFoloweeId)
+                .collect(Collectors.toList());
+
+        List<RecipeDTO> followedRecipes = allRecipes.stream()
+                .filter(recipe -> followedUserIds.contains(recipe.getPosterId()))
+                .sorted(Comparator.comparing(Recipe::getUploadDate).reversed())
+                .map(this::toRecipeDTO)
+                .collect(Collectors.toList());
+
+        List<RecipeDTO> otherRecipes = allRecipes.stream()
+                .filter(recipe -> !followedUserIds.contains(recipe.getPosterId()))
+                .sorted(Comparator.comparing(Recipe::getUploadDate).reversed())
+                .map(this::toRecipeDTO)
+                .collect(Collectors.toList());
+
+        List<RecipeDTO> customRecipesList = new ArrayList<>();
+        customRecipesList.addAll(followedRecipes);
+        customRecipesList.addAll(otherRecipes);
+
+        return customRecipesList;
+    }
+
+
+
 }

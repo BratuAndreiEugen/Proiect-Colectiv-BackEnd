@@ -17,7 +17,7 @@ public class Follow {
     @Column(name = "id")
     private Long id;
     private Long folowerId; //asta e userul
-    private Long foloweeId; // urmaritorii userului
+    private Long foloweeId; // cei pe care ii urmareste userul
 
     public Follow(Long folowerId, Long foloweeId) {
         this.folowerId = folowerId;

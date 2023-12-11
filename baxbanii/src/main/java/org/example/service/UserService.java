@@ -1,7 +1,9 @@
 package org.example.service;
 
 import lombok.AllArgsConstructor;
+import org.example.controllers.requestClasses.UserDTO;
 import org.example.data.entity.User;
+import org.example.exceptions.DataChangeException;
 import org.example.repository.UserRepository;
 import org.example.validation.ValidateUser;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -54,5 +56,14 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return (UserDetails) userRepository.getUserByUsername(username);
+    }
+
+    public UserDTO getUserDTOByUsername(String username) throws DataChangeException {
+        User user = userRepository.getUserByUsername(username);
+        if(user == null){
+            throw new DataChangeException("There is no user with this username!");
+        }
+        UserDTO userDTO = new UserDTO();
+        return userDTO.toUserDTO(user);
     }
 }

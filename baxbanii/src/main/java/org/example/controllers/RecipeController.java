@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.example.controllers.requestClasses.RecipeDTO;
 import org.example.data.entity.Recipe;
 import org.example.exceptions.DataChangeException;
-import org.example.service.MyService;
+import org.example.service.RecipeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +20,13 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class RecipeController {
 
-    private MyService myService;
+    private RecipeService recipeService;
 
     @GetMapping
     public ResponseEntity<?> getRecipes() {
         System.out.println("Get all recipes ...");
         try {
-            List<RecipeDTO> recipes = myService.getAllRecipes();
+            List<RecipeDTO> recipes = recipeService.getAllRecipes();
             return ResponseEntity.ok(recipes);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -37,7 +37,7 @@ public class RecipeController {
     public ResponseEntity<?> getUserRecipesById(@PathVariable Long userId) {
         System.out.println("Get user recipes ...");
         try {
-            List<RecipeDTO> recipesDTO = myService.getRecipesByUser(userId);
+            List<RecipeDTO> recipesDTO = recipeService.getRecipesByUser(userId);
             return ResponseEntity.ok(recipesDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -46,7 +46,7 @@ public class RecipeController {
     @RequestMapping(value = "/user/not/{userId}", method = RequestMethod.GET)
     public ResponseEntity<?> getUserRecipesNotById(@PathVariable Long userId) {
         try {
-            List<RecipeDTO> recipesDTO = myService.getRecipesThatAreNotUsers(userId);
+            List<RecipeDTO> recipesDTO = recipeService.getRecipesThatAreNotUsers(userId);
             return ResponseEntity.ok(recipesDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -58,7 +58,7 @@ public class RecipeController {
         String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
         Float rating = 0.0f;
         try {
-            Recipe newRecipe = myService.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
+            Recipe newRecipe = recipeService.saveRecipe(new Recipe(recipe.getTitle(), recipe.getCaption(), rating, recipe.getThumbnailLink(),
                     recipe.getVideoLink(), date, recipe.getPosterId()));
             return ResponseEntity.ok(newRecipe.getId().toString());
         } catch (DataChangeException e) {
@@ -70,11 +70,33 @@ public class RecipeController {
     public ResponseEntity<?> getRecipeById(@PathVariable Long id) {
 
         try {
-            RecipeDTO recipeDTO = myService.getRecipeById(id);
+            RecipeDTO recipeDTO = recipeService.getRecipeById(id);
             return ResponseEntity.ok(recipeDTO);
         } catch (DataChangeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
     }
+
+    @RequestMapping(value = "/getAllRecipes/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getRecipesCustom(@PathVariable Long userId) {
+        try {
+            List<RecipeDTO> recipes = recipeService.getCustomRecipeList(userId);
+            return ResponseEntity.ok(recipes);
+        } catch (DataChangeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/getAllRecipes/{userId}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    public ResponseEntity<?> getCustomRecipesPaginated(@PathVariable Long userId,
+                                                       @PathVariable int pageNumber,
+                                                       @PathVariable int pageSize) {
+        try {
+            List<RecipeDTO> recipes = recipeService.getCustomRecipeListPaginate(userId, pageNumber, pageSize);
+            return ResponseEntity.ok(recipes);
+        } catch (DataChangeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
 }

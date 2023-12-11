@@ -10,10 +10,5 @@
         <module name="baxbanii.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="baxbanii" target="17" />
-      <module name="baxbanii.main" target="17" />
-      <module name="baxbanii.test" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
