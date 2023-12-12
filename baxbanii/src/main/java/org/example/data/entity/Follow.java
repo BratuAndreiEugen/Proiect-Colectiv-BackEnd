@@ -16,8 +16,8 @@ public class Follow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    private Long folowerId; //asta e userul
-    private Long foloweeId; // cei pe care ii urmareste userul
+    private Long folowerId; // userul logat in aplicatie
+    private Long foloweeId; // userul pe care il urmareste
 
     public Follow(Long folowerId, Long foloweeId) {
         this.folowerId = folowerId;
