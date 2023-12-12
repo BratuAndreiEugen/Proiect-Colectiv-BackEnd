@@ -87,7 +87,7 @@ public class RecipeController {
         }
     }
 
-    @RequestMapping(value = "/getAllRecipes/{userId}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
+    @RequestMapping(value = "/getRecipesPage/{userId}/{pageNumber}/{pageSize}", method = RequestMethod.GET)
     public ResponseEntity<?> getCustomRecipesPaginated(@PathVariable Long userId,
                                                        @PathVariable int pageNumber,
                                                        @PathVariable int pageSize) {
