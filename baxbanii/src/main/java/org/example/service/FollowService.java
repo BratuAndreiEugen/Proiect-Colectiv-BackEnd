@@ -22,7 +22,7 @@ public class FollowService {
     }
 
     public List<Follow> gatAllUsersFollowers(Long id) {
-        return followRepository.getAllUsersFollowers(id);
+        return followRepository.getAllFollowsByUser(id);
     }
 
     public Follow getFollow(Long followerId, Long followeeId) {

@@ -2,7 +2,6 @@ package org.example.service;
 
 import lombok.AllArgsConstructor;
 import org.example.controllers.requestClasses.RecipeDTO;
-import org.example.controllers.requestClasses.UserDTO;
 import org.example.data.entity.Follow;
 import org.example.data.entity.Recipe;
 import org.example.data.entity.User;
@@ -14,7 +13,6 @@ import org.example.validation.ValidateRecipe;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -146,7 +144,7 @@ public class RecipeService {
     }
 
     private List<RecipeDTO> reorganizeRecipes(Long userId, List<Recipe> allRecipes) {
-        List<Follow> followers = followRepository.getAllUsersFollowers(userId);
+        List<Follow> followers = followRepository.getAllFollowsByUser(userId);
         List<Long> followedUserIds = followers.stream()
                 .map(Follow::getFoloweeId)
                 .collect(Collectors.toList());

@@ -26,7 +26,7 @@ public class FollowRepository {
         }
     }
 
-    public List<Follow> getAllUsersFollowers(Long id) {
+    public List<Follow> getAllFollowsByUser(Long id) {
         Session session = entityManager.unwrap(Session.class);
         List<Follow> followList = session.createQuery("from Follow where folowerId =: id", Follow.class)
                 .setParameter("id", id)
