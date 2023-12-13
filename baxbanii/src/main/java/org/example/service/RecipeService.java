@@ -150,13 +150,13 @@ public class RecipeService {
                 .collect(Collectors.toList());
 
         List<RecipeDTO> followedRecipes = allRecipes.stream()
-                .filter(recipe -> followedUserIds.contains(recipe.getPosterId()))
+                .filter(recipe -> followedUserIds.contains(recipe.getPosterId()) )
                 .sorted(Comparator.comparing(Recipe::getUploadDate).reversed())
                 .map(this::toRecipeDTO)
                 .collect(Collectors.toList());
 
         List<RecipeDTO> otherRecipes = allRecipes.stream()
-                .filter(recipe -> !followedUserIds.contains(recipe.getPosterId()))
+                .filter(recipe -> !followedUserIds.contains(recipe.getPosterId()) && !recipe.getPosterId().equals(userId))
                 .sorted(Comparator.comparing(Recipe::getUploadDate).reversed())
                 .map(this::toRecipeDTO)
                 .collect(Collectors.toList());
