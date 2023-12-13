@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -77,6 +78,29 @@ public class RecipeRepository {
         Session session = entityManager.unwrap(Session.class);
         return session.createQuery("from Recipe where id = :id", Recipe.class)
                 .setParameter("id", id)
+                .uniqueResult();
+    }
+
+    /**
+     * It updates the average grades based on new grades
+     *
+     * @param id
+     * @param healthy grade
+     * @param nutritive grade
+     * @param taste grade
+     * @return
+     */
+    public Recipe updateRecipeAveragesRatings(Long id, BigDecimal healthy, BigDecimal nutritive, BigDecimal taste) {
+        Session session = entityManager.unwrap(Session.class);
+        return session.createQuery("update Recipe r " +
+                        "set r.healthAverageRating = :healthy," +
+                        "r.nutritionAverageRating = :nutritive, " +
+                        "r.tasteAverageRating = :taste " +
+                        "where r.id = :id", Recipe.class)
+                .setParameter("id", id)
+                .setParameter("healthy", healthy)
+                .setParameter("nutritive", nutritive)
+                .setParameter("taste", taste)
                 .uniqueResult();
     }
 }

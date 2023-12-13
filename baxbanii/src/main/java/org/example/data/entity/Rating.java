@@ -14,11 +14,21 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    private Long grade;
     private Long recipeId;
     private Long raterId;
+    private Long healthGrade;
+    private Long nutritionGrade;
+    private Long tasteGrade;
 
     public Rating() {
 
+    }
+
+    public Rating(Long recipeId, Long raterId, Long healthRating, Long nutritionRating, Long tasteRating) {
+        this.recipeId = recipeId;
+        this.raterId = raterId;
+        this.healthGrade = healthRating;
+        this.nutritionGrade = nutritionRating;
+        this.tasteGrade = tasteRating;
     }
 }
