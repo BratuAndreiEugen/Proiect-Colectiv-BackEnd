@@ -82,4 +82,14 @@ public class FollowController {
     private ResponseEntity<List<UserDTO>> getFollowingUsers(@RequestParam String username){
         return ResponseEntity.ok().body(userService.getFollowingByUsername(username));
     }
+
+    @GetMapping("/getFollowersUsers")
+    private ResponseEntity<List<UserDTO>> getFollowersUsers(@RequestParam Long id){
+        return ResponseEntity.ok().body(userService.getFollowersById(id));
+    }
+
+    @GetMapping("/getFollowersUsersWithUsername")
+    private ResponseEntity<List<UserDTO>> getFollowersUsers(@RequestParam String username){
+        return ResponseEntity.ok().body(userService.getFollowersByUsername(username));
+    }
 }

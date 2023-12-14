@@ -73,6 +73,17 @@ public class UserService implements UserDetailsService {
         return users.stream().map(this::toUserDTO).collect(Collectors.toList());
     }
 
+    public List<UserDTO> getFollowersById(Long id){
+        List<User> users = userRepository.getFollowers(id);
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getFollowersByUsername(String username){
+        User u = getUserByUserName(username);
+        List<User> users = userRepository.getFollowers(u.getId());
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return (UserDetails) userRepository.getUserByUsername(username);

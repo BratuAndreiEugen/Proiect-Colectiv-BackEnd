@@ -92,6 +92,18 @@ public class UserRepository {
         return followersList != null ? followersList : Collections.emptyList();
     }
 
+    public List<User> getFollowers(Long id){
+        Session session = entityManager.unwrap(Session.class);
+        List<User> followersList = session.createQuery(
+                        "SELECT u FROM User u " +
+                                "JOIN Follow f ON u.id = f.foloweeId " +
+                                "WHERE f.folowerId = :id", User.class)
+                .setParameter("id", id)
+                .getResultList();
+
+        return followersList != null ? followersList : Collections.emptyList();
+    }
+
     /**
      * Saves a user to the database.
      *
