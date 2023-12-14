@@ -1,6 +1,7 @@
 package org.example.service;
 
 import lombok.AllArgsConstructor;
+import org.example.controllers.requestClasses.UserDTO;
 import org.example.data.entity.User;
 import org.example.repository.UserRepository;
 import org.example.validation.ValidateUser;
@@ -10,6 +11,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.xml.bind.ValidationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service(value = "userService")
 @AllArgsConstructor
@@ -18,6 +21,14 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ValidateUser validateUser;
     private final BCryptPasswordEncoder cryptPasswordEncoder;
+
+    public UserDTO toUserDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setBio(user.getBio());
+        return dto;
+    }
 
     public void logIn(String userName, String password) throws IllegalAccessException {
         User user = userRepository.getUserByUsername(userName);
@@ -49,6 +60,17 @@ public class UserService implements UserDetailsService {
     }
     public User getUserByUserName(String username) {
         return userRepository.getUserByUsername(username);
+    }
+
+    public List<UserDTO> getFollowingById(Long id){
+        List<User> users = userRepository.getFollowing(id);
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getFollowingByUsername(String username){
+        User u = getUserByUserName(username);
+        List<User> users = userRepository.getFollowing(u.getId());
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
     }
 
     @Override

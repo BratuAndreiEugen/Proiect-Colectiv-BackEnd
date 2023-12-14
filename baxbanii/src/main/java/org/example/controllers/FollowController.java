@@ -3,6 +3,7 @@ package org.example.controllers;
 import lombok.AllArgsConstructor;
 import org.example.controllers.requestClasses.FollowRequest;
 import org.example.controllers.requestClasses.FollowRequestWithUserName;
+import org.example.controllers.requestClasses.UserDTO;
 import org.example.data.entity.Follow;
 import org.example.data.entity.User;
 import org.example.service.FollowService;
@@ -72,4 +73,13 @@ public class FollowController {
         return ResponseEntity.ok().body(followService.getAllUsersFollowing(user.getId()));
     }
 
+    @GetMapping("/getFollowingUsers")
+    private ResponseEntity<List<UserDTO>> getFollowingUsers(@RequestParam Long id){
+        return ResponseEntity.ok().body(userService.getFollowingById(id));
+    }
+
+    @GetMapping("/getFollowingUsersWithUsername")
+    private ResponseEntity<List<UserDTO>> getFollowingUsers(@RequestParam String username){
+        return ResponseEntity.ok().body(userService.getFollowingByUsername(username));
+    }
 }
