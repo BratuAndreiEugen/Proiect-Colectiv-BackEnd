@@ -25,6 +25,8 @@ public class FollowService {
         return followRepository.getAllUsersFollowers(id);
     }
 
+    public List<Follow> getAllUsersFollowing(Long id){return followRepository.getAllUsersFollowing(id);}
+
     public Follow getFollow(Long followerId, Long followeeId) {
         return followRepository.getFollow(followerId, followeeId);
     }

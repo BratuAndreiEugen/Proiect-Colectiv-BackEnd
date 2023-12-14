@@ -93,6 +93,14 @@ public class MyService {
         return toUserDTO(user);
     }
 
+    public UserDTO getUserDTOById(Long id) throws DataChangeException {
+        User user = userRepository.getUserById(id);
+        if(user == null){
+            throw new DataChangeException("There is no user with this username!");
+        }
+        return toUserDTO(user);
+    }
+
     public RecipeDTO getRecipeById(Long recipeId) throws DataChangeException{
         Recipe recipe = recipeRepository.getRecipeById(recipeId);
         if(recipe == null){

@@ -34,6 +34,14 @@ public class FollowRepository {
         return followList != null ? followList : Collections.emptyList();
     }
 
+    public List<Follow> getAllUsersFollowing(Long id) {
+        Session session = entityManager.unwrap(Session.class);
+        List<Follow> followList = session.createQuery("from Follow where foloweeId =: id", Follow.class)
+                .setParameter("id", id)
+                .getResultList();
+        return followList != null ? followList : Collections.emptyList();
+    }
+
     public void deleteFollows(Follow follow) {
         Transaction transaction = null;
         try {
