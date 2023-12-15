@@ -49,7 +49,9 @@ public class MyService {
         dto.setVideoLink(recipe.getVideoLink());
         dto.setUploadDate(recipe.getUploadDate());
         dto.setPosterId(recipe.getPosterId());
-
+        dto.setAverageRating(recipe.getAverageRating());
+        dto.setHealthAverageRating(recipe.getHealthAverageRating());
+        dto.setNutritionAverageRating(recipe.getNutritionAverageRating());
 
         User poster = userRepository.getUserById(recipe.getPosterId());
         dto.setPosterUsername(poster != null ? poster.getUsername() : "Unknown");
