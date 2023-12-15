@@ -26,4 +26,17 @@ public class UserController {
         }
 
     }
+
+    @RequestMapping(value = "/byid/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+
+        try{
+            UserDTO user = userService.getUserDTOById(id);
+            return ResponseEntity.ok(user);
+        }
+        catch (DataChangeException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
+    }
 }

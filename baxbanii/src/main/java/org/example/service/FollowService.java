@@ -26,14 +26,20 @@ public class FollowService {
         followRepository.deleteFollows(follow);
     }
 
-    public List<User> getAllUsersFollowers(Long followeeId) {
+    /*public List<User> getAllUsersFollowers(Long followeeId) {
         List<Follow> follows = followRepository.getAllFollowsReceivedByUser(followeeId);
         return follows.stream()
                 .map(follow -> userRepository.getUserById(follow.getFolowerId()))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     public Follow getFollow(Long followerId, Long followeeId) {
         return followRepository.getFollow(followerId, followeeId);
     }
+
+    public List<Follow> getAllUsersFollowers(Long id) {
+        return followRepository.getAllFollowsReceivedByUser(id);
+    }
+
+    public List<Follow> getAllUsersFollowing(Long id){return followRepository.getAllFollowsByUser(id);}
 }

@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.xml.bind.ValidationException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service(value = "userService")
 @AllArgsConstructor
@@ -20,6 +22,14 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final ValidateUser validateUser;
     private final BCryptPasswordEncoder cryptPasswordEncoder;
+
+    public UserDTO toUserDTO(User user) {
+        UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
+        dto.setUsername(user.getUsername());
+        dto.setBio(user.getBio());
+        return dto;
+    }
 
     public void logIn(String userName, String password) throws IllegalAccessException {
         User user = userRepository.getUserByUsername(userName);
@@ -63,7 +73,39 @@ public class UserService implements UserDetailsService {
         if(user == null){
             throw new DataChangeException("There is no user with this username!");
         }
-        UserDTO userDTO = new UserDTO();
-        return userDTO.toUserDTO(user);
+        return toUserDTO(user);
     }
+
+
+    public UserDTO getUserDTOById(Long id) throws DataChangeException {
+        User user = userRepository.getUserById(id);
+        if(user == null){
+            throw new DataChangeException("There is no user with this username!");
+        }
+        return toUserDTO(user);
+    }
+
+
+    public List<UserDTO> getFollowingById(Long id){
+        List<User> users = userRepository.getFollowing(id);
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getFollowingByUsername(String username){
+        User u = getUserByUserName(username);
+        List<User> users = userRepository.getFollowing(u.getId());
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getFollowersById(Long id){
+        List<User> users = userRepository.getFollowers(id);
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getFollowersByUsername(String username){
+        User u = getUserByUserName(username);
+        List<User> users = userRepository.getFollowers(u.getId());
+        return users.stream().map(this::toUserDTO).collect(Collectors.toList());
+    }
+
 }
