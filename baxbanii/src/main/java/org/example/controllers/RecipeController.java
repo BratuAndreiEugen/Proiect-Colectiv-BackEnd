@@ -2,6 +2,7 @@ package org.example.controllers;
 
 import lombok.AllArgsConstructor;
 import org.example.controllers.requestClasses.RecipeDTO;
+import org.example.data.entity.Rating;
 import org.example.data.entity.Recipe;
 import org.example.exceptions.DataChangeException;
 import org.example.service.RecipeService;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @AllArgsConstructor
@@ -99,4 +102,17 @@ public class RecipeController {
         }
     }
 
+    @RequestMapping(value = "/{recipeId}/rating", method = RequestMethod.POST)
+    public ResponseEntity<String> saveRating(@PathVariable Long recipeId, @RequestBody Map<String, Object> ratingRequest) {
+        try {
+            Rating newRating = recipeService.saveRating(new Rating(recipeId,
+                    (Long) ratingRequest.get("userId"),
+                    (Long) ratingRequest.get("healthy"),
+                    (Long) ratingRequest.get("nutritive"),
+                    (Long) ratingRequest.get("tasty")));
+            return ResponseEntity.ok(newRating.getId().toString());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
 }

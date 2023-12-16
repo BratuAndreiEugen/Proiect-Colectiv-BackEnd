@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -22,6 +23,9 @@ public class Recipe {
     //!!THIS STRING SHOULD HAVE THIS FORMAT: yyyy-MM-dd
     private String uploadDate;
     private Long posterId;
+    private BigDecimal healthAverageRating;
+    private BigDecimal nutritionAverageRating;
+    private BigDecimal tasteAverageRating;
 
     public Recipe() {
 
@@ -35,5 +39,8 @@ public class Recipe {
         this.videoLink = videoLink;
         this.uploadDate = uploadDate;
         this.posterId = posterId;
+        this.healthAverageRating = new BigDecimal(0);
+        this.nutritionAverageRating = new BigDecimal(0);
+        this.tasteAverageRating = new BigDecimal(0);
     }
 }
