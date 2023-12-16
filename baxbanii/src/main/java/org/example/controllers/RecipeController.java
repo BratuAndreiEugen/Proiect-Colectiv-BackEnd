@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import lombok.AllArgsConstructor;
+import org.example.controllers.requestClasses.RatingRequest;
 import org.example.controllers.requestClasses.RecipeDTO;
 import org.example.data.entity.Rating;
 import org.example.data.entity.Recipe;
@@ -103,15 +104,24 @@ public class RecipeController {
     }
 
     @RequestMapping(value = "/{recipeId}/rating", method = RequestMethod.POST)
-    public ResponseEntity<String> saveRating(@PathVariable Long recipeId, @RequestBody Map<String, Object> ratingRequest) {
+    public ResponseEntity<String> saveRating(@PathVariable Long recipeId, @RequestBody RatingRequest ratingRequest) {
         try {
             Rating newRating = recipeService.saveRating(new Rating(recipeId,
-                    (Long) ratingRequest.get("userId"),
-                    (Long) ratingRequest.get("healthy"),
-                    (Long) ratingRequest.get("nutritive"),
-                    (Long) ratingRequest.get("tasty")));
+                    ratingRequest.getUserId(),
+                    ratingRequest.getHealthy(),
+                    ratingRequest.getNutritive(),
+                    ratingRequest.getTasty()));
             return ResponseEntity.ok(newRating.getId().toString());
         } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    @RequestMapping(value = "/rating/{recipeId}/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<?> getRating(@PathVariable Long recipeId, @PathVariable Long userId){
+        try{
+            return ResponseEntity.ok(recipeService.getRating(recipeId, userId));
+        }catch (Exception e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }

@@ -109,6 +109,7 @@ public class RecipeService {
             computeRatingAverage(newRating.getRecipeId());
             return newRating;
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
@@ -255,6 +256,10 @@ public class RecipeService {
         BigDecimal averageTaste = tasteSum.divide(numberOfRatings);
 
         recipeRepository.updateRecipeAveragesRatings(recipeId, averageHealth, averageNutritive, averageTaste);
+    }
+
+    public Rating getRating(Long recipeId, Long raterId){
+        return ratingRepository.getRatingsByRecipeIdUser(recipeId, raterId);
     }
 
 }

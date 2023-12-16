@@ -26,7 +26,6 @@ public class Recipe {
     private BigDecimal healthAverageRating;
     private BigDecimal nutritionAverageRating;
     private BigDecimal tasteAverageRating;
-
     public Recipe() {
 
     }

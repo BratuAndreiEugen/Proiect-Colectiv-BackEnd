@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,8 +46,10 @@ public class RatingRepository {
                 .setParameter("recipeId", recipeId)
                 .setParameter("raterId", raterId)
                 .getResultList();
-        if (ratings.size() > 1) {
+        if (ratings.size() >= 1) {
             System.out.println("Ceva bai");
+        }else{
+            return null;
         }
         return ratings.get(0);
     }
@@ -89,5 +92,6 @@ public class RatingRepository {
                 .setParameter("oldRaterId", oldRating.getRaterId())
                 .setParameter("oldRecipeId", oldRating.getRecipeId())
                 .executeUpdate();
+
     }
 }
