@@ -90,17 +90,17 @@ public class RecipeRepository {
      * @param taste grade
      * @return
      */
-    public Recipe updateRecipeAveragesRatings(Long id, BigDecimal healthy, BigDecimal nutritive, BigDecimal taste) {
+    @Transactional
+    public void updateRecipeAveragesRatings(Long id, BigDecimal healthy, BigDecimal nutritive, BigDecimal taste) {
         Session session = entityManager.unwrap(Session.class);
-        return session.createQuery("update Recipe r " +
-                        "set r.healthAverageRating = :healthy," +
-                        "r.nutritionAverageRating = :nutritive, " +
-                        "r.tasteAverageRating = :taste " +
-                        "where r.id = :id", Recipe.class)
-                .setParameter("id", id)
-                .setParameter("healthy", healthy)
-                .setParameter("nutritive", nutritive)
-                .setParameter("taste", taste)
-                .uniqueResult();
+
+        Recipe recipe = session.get(Recipe.class, id);
+        if (recipe != null) {
+            recipe.setHealthAverageRating(healthy);
+            recipe.setNutritionAverageRating(nutritive);
+            recipe.setTasteAverageRating(taste);
+            session.update(recipe);
+        }
+
     }
 }
