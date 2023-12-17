@@ -20,11 +20,9 @@ import org.example.validation.ValidateRecipe;
 import org.springframework.stereotype.Service;
 
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -202,9 +200,10 @@ public class RecipeService {
     }
 
     private List<RecipeDTO> reorganizeRecipes(Long userId, List<Recipe> allRecipes) {
-        List<Follow> followers = followRepository.getAllFollowsByUser(userId);
+        List<Follow> followers = followRepository.getAllFollowsReceivedByUser(userId);
+
         List<Long> followedUserIds = followers.stream()
-                .map(Follow::getFoloweeId)
+                .map(Follow::getFolowerId)
                 .collect(Collectors.toList());
 
         List<RecipeDTO> followedRecipes = allRecipes.stream()
@@ -212,6 +211,8 @@ public class RecipeService {
                 .sorted(Comparator.comparing(Recipe::getUploadDate).reversed())
                 .map(this::toRecipeDTO)
                 .collect(Collectors.toList());
+
+        Collections.shuffle(followedRecipes, new Random());
 
         List<RecipeDTO> otherRecipes = allRecipes.stream()
                 .filter(recipe -> !followedUserIds.contains(recipe.getPosterId()) && !recipe.getPosterId().equals(userId))
