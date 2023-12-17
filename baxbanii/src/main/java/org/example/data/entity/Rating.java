@@ -31,4 +31,16 @@ public class Rating {
         this.nutritionGrade = nutritionRating;
         this.tasteGrade = tasteRating;
     }
+
+    @Override
+    public String toString() {
+        return "Rating{" +
+                "id=" + id +
+                ", recipeId=" + recipeId +
+                ", raterId=" + raterId +
+                ", healthGrade=" + healthGrade +
+                ", nutritionGrade=" + nutritionGrade +
+                ", tasteGrade=" + tasteGrade +
+                '}';
+    }
 }

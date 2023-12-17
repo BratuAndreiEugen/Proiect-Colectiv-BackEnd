@@ -54,7 +54,7 @@ public class RecipeService {
         dto.setAverageRating(recipe.getAverageRating());
         dto.setHealthAverageRating(recipe.getHealthAverageRating());
         dto.setNutritionAverageRating(recipe.getNutritionAverageRating());
-
+        dto.setTasteAverageRating(recipe.getTasteAverageRating());
         User poster = userRepository.getUserById(recipe.getPosterId());
         dto.setPosterUsername(poster != null ? poster.getUsername() : "Unknown");
 
@@ -106,7 +106,9 @@ public class RecipeService {
                 throw new Exception("Recipe could not be saved");
             }
 
-            computeRatingAverage(newRating.getRecipeId());
+            // Se intampla cv cu tranzactiile aici : in loc sa ia in calcul la medie rating-ul nou, il ia pe cel vechi, ca si cum nu
+            // ar fi comisa tranzactia
+            //computeRatingAverage(newRating.getRecipeId());
             return newRating;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -230,7 +232,7 @@ public class RecipeService {
      * @param recipeId
      * @throws Exception
      */
-    private void computeRatingAverage(Long recipeId) throws Exception {
+    public Recipe computeRatingAverage(Long recipeId) throws Exception {
         Recipe recipe = recipeRepository.getRecipeById(recipeId);
         if (recipe == null) {
             throw new Exception("No recipe when compute rating!");
@@ -256,6 +258,7 @@ public class RecipeService {
         BigDecimal averageTaste = tasteSum.divide(numberOfRatings);
 
         recipeRepository.updateRecipeAveragesRatings(recipeId, averageHealth, averageNutritive, averageTaste);
+        return recipeRepository.getRecipeById(recipeId);
     }
 
     public Rating getRating(Long recipeId, Long raterId){

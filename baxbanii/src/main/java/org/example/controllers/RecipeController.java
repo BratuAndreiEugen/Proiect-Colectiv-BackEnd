@@ -111,10 +111,23 @@ public class RecipeController {
                     ratingRequest.getHealthy(),
                     ratingRequest.getNutritive(),
                     ratingRequest.getTasty()));
-            return ResponseEntity.ok(newRating.getId().toString());
+            return ResponseEntity.ok(newRating.toString());
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "/{recipeId}/averageRating", method = RequestMethod.PUT)
+    public ResponseEntity<?> calculateAverageRating(@PathVariable Long recipeId)
+    {
+        try{
+            return ResponseEntity.ok(recipeService.computeRatingAverage(recipeId));
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+
     }
 
     @RequestMapping(value = "/rating/{recipeId}/{userId}", method = RequestMethod.GET)
