@@ -19,6 +19,7 @@ import org.example.validation.ValidateRating;
 import org.example.validation.ValidateRecipe;
 import org.springframework.stereotype.Service;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -253,9 +254,9 @@ public class RecipeService {
         BigDecimal numberOfRatings = BigDecimal.valueOf(ratingListByRecipe.size());
 
         // Calculate averages
-        BigDecimal averageHealth = healthSum.divide(numberOfRatings);
-        BigDecimal averageNutritive = nutritiveSum.divide(numberOfRatings);
-        BigDecimal averageTaste = tasteSum.divide(numberOfRatings);
+        BigDecimal averageHealth = healthSum.divide(numberOfRatings, RoundingMode.HALF_UP);
+        BigDecimal averageNutritive = nutritiveSum.divide(numberOfRatings, RoundingMode.HALF_UP);
+        BigDecimal averageTaste = tasteSum.divide(numberOfRatings, RoundingMode.HALF_UP);
 
         recipeRepository.updateRecipeAveragesRatings(recipeId, averageHealth, averageNutritive, averageTaste);
         return recipeRepository.getRecipeById(recipeId);
