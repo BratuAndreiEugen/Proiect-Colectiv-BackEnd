@@ -18,6 +18,14 @@ public class LogInController {
 
     private final UserService service;
 
+    /**
+     * Log in a user and generate an authentication token.
+     *
+     * @param logInRequest LogInRequest object containing username and password.
+     * @return ResponseEntity containing an authentication token or an error message if login fails.
+     * Example Request: {"userName": "john_doe", "password": "securePassword"}
+     * Example Response: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqb2huX2RvZSIsImlhdCI6MTY0OTExOTQzMCwiZXhwIjoxNjQ5MTIxMDMwfQ.eU5aPqF1-xRBc53zgBTYn82q6eRVl5I1-kIqyJgdd9I"
+     */
     @PostMapping
     public ResponseEntity<String> logIn(@RequestBody LogInRequest logInRequest) {
         try {
@@ -29,6 +37,12 @@ public class LogInController {
         }
     }
 
+    /**
+     * Generate a JWT authentication token for a given username.
+     *
+     * @param username Username for which the token is generated.
+     * @return JWT authentication token.
+     */
     private String generateToken(String username) {
         return Jwts.builder()
                 .setSubject(username)

@@ -19,28 +19,39 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserService userService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    /**
+     * Configures HTTP security settings.
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/v*/**").
-                permitAll()
-                .anyRequest()
-                .authenticated().and()
-                .formLogin();
+                .antMatchers("/v*/**").permitAll() // Allow public access to API endpoints starting with "/v"
+                .anyRequest().authenticated() // Require authentication for all other requests
+                .and()
+                .formLogin(); // Enable form-based login
     }
 
+    /**
+     * Configures authentication manager with a custom UserDetailsService and password encoder.
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
+    /**
+     * Creates a DaoAuthenticationProvider bean.
+     *
+     * @return DaoAuthenticationProvider configured with the UserDetailsService and password encoder.
+     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(bCryptPasswordEncoder);
-        provider.setUserDetailsService(userService);
+        provider.setPasswordEncoder(bCryptPasswordEncoder); // Set the password encoder
+        provider.setUserDetailsService(userService); // Set the custom UserDetailsService
         return provider;
     }
 }
+

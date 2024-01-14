@@ -18,6 +18,14 @@ public class RegisterController {
 
     private final UserService service;
 
+    /**
+     * Register a new user.
+     *
+     * @param registerRequest RegisterRequest object containing user registration details.
+     * @return ResponseEntity indicating successful registration or an error message if registration fails.
+     * Example Request: {"username": "john_doe", "email": "john.doe@example.com", "passwordHash": "hashedPassword", "bio": "A bio about John Doe"}
+     * Example Response: "ok!" or an error message
+     */
     @PostMapping
     public ResponseEntity<String> register(@RequestBody RegisterRequest registerRequest){
         try{

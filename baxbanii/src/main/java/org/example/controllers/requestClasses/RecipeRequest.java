@@ -1,12 +1,15 @@
 package org.example.controllers.requestClasses;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@Data
-public class RecipeDTO {
-    private Long id;
+@Getter
+@Setter
+@AllArgsConstructor
+public class RecipeRequest {
     private String title;
     private String caption;
     private Float averageRating;
@@ -15,7 +18,6 @@ public class RecipeDTO {
     //!!THIS STRING SHOULD HAVE THIS FORMAT: yyyy-MM-dd
     private String uploadDate;
     private Long posterId;
-    private String posterUsername;
     private BigDecimal healthAverageRating;
     private BigDecimal nutritionAverageRating;
     private BigDecimal tasteAverageRating;
