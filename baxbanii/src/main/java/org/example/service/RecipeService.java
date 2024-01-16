@@ -147,9 +147,6 @@ public class RecipeService {
             throw new DataChangeException("There is no user with this id!");
         }
         List<Recipe> recipes = recipeRepository.getRecipesByUser(userId);
-        if (recipes.isEmpty()) {
-            throw new DataChangeException("There are no recipes for this user!");
-        }
         return recipes.stream().map(this::toRecipeDTO).collect(Collectors.toList());
     }
 

@@ -24,8 +24,7 @@ public class ValidateRecipe {
     public void validateRecipe(Recipe recipe) throws DataChangeException {
         if (!isNotEmpty(recipe.getTitle()) ||
                 !isNotEmpty(recipe.getCaption()) ||
-                !isNotEmpty(recipe.getThumbnailLink()) ||
-                !isNotEmpty(recipe.getVideoLink())) {
+                !isNotEmpty(recipe.getThumbnailLink())) {
             throw new DataChangeException("All fields must be filled!");
         }
 
