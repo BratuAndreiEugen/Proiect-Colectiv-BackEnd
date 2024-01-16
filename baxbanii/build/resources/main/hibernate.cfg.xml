@@ -5,7 +5,7 @@
     <session-factory>
         <!-- JDBC Database connection settings -->
         <property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>
-        <property name="hibernate.connection.url">jdbc:sqlserver://baxbaniidb.c7vcmmeeoba6.eu-north-1.rds.amazonaws.com\baxbaniidb:1433;database=bugsbunny</property>
+        <property name="hibernate.connection.url">jdbc:sqlserver://baxbaniidb.cr22ko4eo4ri.eu-central-1.rds.amazonaws.com\baxbaniidb:1433;database=bugsbunny</property>
         <property name="hibernate.connection.username">emibaxbanii</property>
         <property name="hibernate.connection.password">bugsbunny2</property>
 
